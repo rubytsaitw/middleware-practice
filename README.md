@@ -8,6 +8,7 @@ When server gets a request, print below info in server log
   - time-stamps, local Taipei time
   - HTTP request method
   - URL
+  - request duration in milliseconds (ms)
 
 ## Environment SetUp
 
