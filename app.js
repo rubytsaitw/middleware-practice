@@ -2,6 +2,13 @@ const express = require('express')
 const app = express()
 const PORT = 5000
 
+const getActualRequestDurationInMilliseconds = start => {
+  const NS_PER_SEC = 1e9; //  convert to nanoseconds
+  const NS_TO_MS = 1e6; // convert to milliseconds
+  const diff = process.hrtime(start);
+  return (diff[0] * NS_PER_SEC + diff[1]) / NS_TO_MS;
+};
+
 let demoLogger = (req, res, next) => {
   let currentDateTime = new Date()
   let formattedDate =
@@ -18,7 +25,9 @@ let demoLogger = (req, res, next) => {
     currentDateTime.getSeconds()
   let method = req.method
   let url = req.url
-  console.log(`${formattedDate} |  ${method} from ${url}`)
+  const start = process.hrtime();
+  const durationInMilliseconds = getActualRequestDurationInMilliseconds(start);
+  console.log(`${formattedDate} |  ${method} from ${url} | total time: ${durationInMilliseconds.toLocaleString()} ms`)
   next()
 }
 
